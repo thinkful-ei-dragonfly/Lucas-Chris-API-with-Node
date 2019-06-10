@@ -40,6 +40,55 @@ app.get('/cipher', (req, res) => {
 
  res.send(newString);
 })
+
+// Exercise 3
+
+app.get('/lotto', (req, res) => {
+  // number listener
+  if (req.query.numbers.length !== 6) {
+    return res.status(400).send('Please provide 6 lottery numbers')
+  }
+  // create our array of numbers
+  let ourArray = req.query.numbers.map(num => {
+    return parseInt(num);
+  });
+  // start matches at 0
+  let matches = 0;
+  // create random array
+  let randomArray = [];
+  for (let i = 0; i < 6; i ++) {
+   let randomNumber = Math.floor(Math.random() * 21);
+   randomArray.push(randomNumber);
+  }
+
+  // validate numbers are between 1 and 20
+  for (var i = 0; i < ourArray.length; i++) {
+    if ((ourArray[i] === 0) || (ourArray[i] > 21)) {
+      return res.status(400).send(`Numbers must be between 1 and 20. You entered ${ourArray[i]} `)
+    }
+    if (randomArray.includes(ourArray[i])) {
+      matches += 1;
+    }
+  }
+
+  // handle matches
+  if (matches < 4) {
+    res.send('Sorry, you lose')
+  } else {
+    if (matches === 4) {
+      res.send('Congratulations, you win a free tickets')
+    }
+    if (matches === 5) {
+      res.send('Congratulations! You win $100')
+    }
+    if (matches === 6) {
+      res.send('Wow! Unbelievable! You could have won the mega millions!')
+    }
+  }
+
+
+})
+
 app.listen(8000, () => {
   console.log('listening on 800');
 })
