@@ -19,7 +19,26 @@ app.get('/sum', (req, res) => {
 })
 // Exercise 2
 app.get('/cipher', (req, res) => {
+  const queryText = req.query.text;
+  const queryShift = 1;
+  if (req.query.shift) {
+      queryShift = parseInt(req.query.shift)
+  }
 
+  if (!queryText) {
+    return res.status(400).send('Please provide a string to cipher')
+  }
+
+
+ let newString = '';
+ for (let i = 0; i < queryText.length; i++) {
+   let initialCharCode = queryText[i].charCodeAt(0);
+   let newCharCode = initialCharCode + queryShift;
+   let newLetter = String.fromCharCode(newCharCode);
+   newString += newLetter;
+ }
+
+ res.send(newString);
 })
 app.listen(8000, () => {
   console.log('listening on 800');
